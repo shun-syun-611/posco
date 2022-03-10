@@ -15,6 +15,8 @@ const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 const postInputText = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
   setInputText('');
+  console.log(`投稿内容: テキストは${inputText} 画像は${fileUrl}`);
+  
 }
 
 // 投稿画像のプレビューの出力
@@ -23,8 +25,17 @@ const previewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
   if(!e.target.files) return
   const imageFile = e.target.files[0];
   const imageUrl = URL.createObjectURL(imageFile);
-  setFileUrl(imageUrl)
+  setFileUrl(imageUrl);
+  console.log("読み込まれてる");
 }
+
+// 投稿画像の選択取消
+const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  setFileUrl('');
+  console.log(fileUrl);
+}
+
 
   return (
     <div className={classes.app}>
@@ -46,12 +57,15 @@ const previewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
                 <div className={classes.postArea}>
                     <div className={classes.inputFileArea}>
                         <label className={classes.inputFileLabel}>
-                          <input onChange={previewImage} className={classes.inputFile} type="file" accept="image/*" />
+                          <input onChange={previewImage} className={classes.inputFile} type="file" accept="image/*"/>
                             ファイル添付
                         </label>
+                        {/* ここは、ファイル添付の状態によって、出しわける予定 */}
                         <span className={classes.inputFileAttention}>選択されていません</span>
+                        <button onClick={resetSelectedFile} className={classes.resetButton}>リセット</button>
                         <div className={classes.inputFilePreview}>
                           <img className={classes.inputFileImage} src={fileUrl} alt="" />
+                          <img src={`${process.env.PUBLIC_URL}/user.jpeg`} alt="" />
                         </div>
                     </div>
                     <div className={classes.postBottunArea}>
