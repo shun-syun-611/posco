@@ -7,6 +7,21 @@ function App() {
 
 // 投稿内容の入力
 const [inputText, setInputText] = useState("");
+
+type Todos = {
+  task: string,
+  favorites: number,
+  image?: string,
+}
+
+const initialTodos = [{
+  task: "初期値",
+  favorites: 0,
+  image: "" 
+  }]
+const [todos, setTodos] = useState<Todos[]>(initialTodos);
+
+console.log("通過して初期化されてる");
 const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   setInputText(e.target.value);
 }
@@ -14,28 +29,30 @@ const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 // 投稿内容の出力
 const postInputText = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
+  if (inputText === "") return;
+  const NewTodos = setTodos(
+    [...todos, {task: inputText, favorites: 0, image: fileUrl }]
+  );
   setInputText('');
-  console.log(`投稿内容: テキストは${inputText} 画像は${fileUrl}`);
-  
+  setFileUrl('');
 }
 
 // 投稿画像のプレビューの出力
 const [fileUrl, setFileUrl] = useState<string>("");
 const previewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if(!e.target.files) return
-  const imageFile = e.target.files[0];
+  const imageFile = e.target.files![0];
   const imageUrl = URL.createObjectURL(imageFile);
   setFileUrl(imageUrl);
-  console.log("読み込まれてる");
+  // 同じ画像を選択してもイベントが発火するために最後にvalueを空にする
+  e.target.value = "";
 }
 
 // 投稿画像の選択取消
 const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
+  setInputText('');
   setFileUrl('');
-  console.log(fileUrl);
 }
-
 
   return (
     <div className={classes.app}>
@@ -57,15 +74,14 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
                 <div className={classes.postArea}>
                     <div className={classes.inputFileArea}>
                         <label className={classes.inputFileLabel}>
-                          <input onChange={previewImage} className={classes.inputFile} type="file" accept="image/*"/>
+                          <input className={classes.inputFile} type="file" accept="image/*" onChange={previewImage}/>
                             ファイル添付
                         </label>
                         {/* ここは、ファイル添付の状態によって、出しわける予定 */}
                         <span className={classes.inputFileAttention}>選択されていません</span>
-                        <button onClick={resetSelectedFile} className={classes.resetButton}>リセット</button>
+                        <button className={classes.resetButton} onClick={resetSelectedFile}>リセット</button>
                         <div className={classes.inputFilePreview}>
-                          <img className={classes.inputFileImage} src={fileUrl} alt="" />
-                          <img src={`${process.env.PUBLIC_URL}/user.jpeg`} alt="" />
+                          <img className={classes.inputFileImage} alt="" src={fileUrl} />
                         </div>
                     </div>
                     <div className={classes.postBottunArea}>
@@ -78,23 +94,35 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
         {/* タイムラインエリア */}
         <div className={classes.timeLineArea}>
 
-        {/* ここをmap関数などで繰り返し処理 */}
-          <div className={classes.timeLineCard}>
+        {
+        todos.map((outputText,index) => {
+          return (
+          <div key={index} className={classes.timeLineCard}>
             <div className={classes.timeLineContents}>
               <div className={classes.userArea}>
                   <img src={image} className={classes.userImage} alt=""/>
                   <p className={classes.userName}>user name</p>
               </div>
               <div className={classes.timeLineContent}>
-                <p className={classes.timeLineText}>タイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキストタイムラインテキスト</p>
+                <p className={classes.timeLineText}>{outputText.task}</p>
+                <img className={classes.inputFileImage} alt="" src={outputText.image} />
               </div>
             </div>
 
             <div className={classes.favotitesButton}>
               <span className={classes.heartIcon}></span>
-              <span className={classes.favoritesNumber}>0</span>
+              <span className={classes.favoritesNumber}>{outputText.favorites}</span>
             </div>
           </div>
+          );
+        })
+        }
+
+          {/* map関数テスト */}
+          
+          {/* <div>
+            {arr.map((string, index) => <div key={index}>{`${string}のキーは、${index}です。`}</div>)}
+          </div> */}
 
         </div>
 
