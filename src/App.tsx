@@ -14,24 +14,32 @@ type Todos = {
   image?: string,
 }
 
-const initialTodos = [{
-  task: "初期値",
-  favorites: 0,
-  image: "" 
-  }]
-const [todos, setTodos] = useState<Todos[]>(initialTodos);
+const [todos, setTodos] = useState<Todos[]>([]);
 
 console.log("通過して初期化されてる");
+console.log(todos);
 const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   setInputText(e.target.value);
+}
+
+// いいねボタンのクリックイベント
+const [count, setCount] = useState<number>(0);
+const favoritesCount = (index:number) => {
+  const newTodos = [...todos];
+  newTodos[index].favorites = newTodos[index].favorites + 1;
+  console.log("いいね!を追加したよ!");
+  setTodos(newTodos);
 }
 
 // 投稿内容の出力
 const postInputText = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
-  if (inputText === "") return;
+  if (inputText === "") {
+    alert("テキストを入力してください。")
+    return;
+  }
   const NewTodos = setTodos(
-    [...todos, {task: inputText, favorites: 0, image: fileUrl }]
+    [...todos, {task: inputText, favorites: count, image: fileUrl }]
   );
   setInputText('');
   setFileUrl('');
@@ -94,6 +102,8 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
         {/* タイムラインエリア */}
         <div className={classes.timeLineArea}>
 
+          <p className={classes.timeLineTitle}>タイムライン</p>
+
         {
         todos.map((outputText,index) => {
           return (
@@ -109,9 +119,10 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
               </div>
             </div>
 
-            <div className={classes.favotitesButton}>
+            <div className={classes.favotitesButton} onClick={()=>favoritesCount(index)}>
               <span className={classes.heartIcon}></span>
               <span className={classes.favoritesNumber}>{outputText.favorites}</span>
+              {/* <span className={classes.favoritesNumber}>{outputText.favorites}</span> */}
             </div>
           </div>
           );

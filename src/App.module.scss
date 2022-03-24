@@ -116,7 +116,10 @@
     outline: none;
   }
 }
-
+.timeLineTitle {
+  font-size: 14px;
+  text-align: center;
+}
 .timeLineArea {
 }
 .timeLineCard {
@@ -133,6 +136,7 @@
 }
 .timeLineText {
   font-size: 12px;
+  margin-bottom: 10px;
 }
 .favotitesButton {
   text-align: right;
