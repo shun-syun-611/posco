@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './reset.css'
 import classes from './App.module.scss'
+import PostArea from './components/PostArea/PostArea';
 import image from './img/user.jpeg';
 
 function App() {
@@ -18,7 +19,7 @@ const [todos, setTodos] = useState<Todos[]>([]);
 
 console.log("通過して初期化されてる");
 console.log(todos);
-const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
   setInputText(e.target.value);
 }
 
@@ -29,6 +30,7 @@ const favoritesCount = (index:number) => {
   newTodos[index].favorites = newTodos[index].favorites + 1;
   console.log("いいね!を追加したよ!");
   setTodos(newTodos);
+  console.log(todos);
 }
 
 // 投稿内容の出力
@@ -68,36 +70,15 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
       <main className={classes.main}>
 
         {/* 投稿エリア */}
-        <div className={classes.postArea}>
-            <form className={classes.inputAndPostArea}>
-                <div className={classes.userAndInputArea}>
-                    <div className={classes.userArea}>
-                        <img src={image} className={classes.userImage} alt=""/>
-                        <p className={classes.userName}>user name</p>
-                    </div>
-                    <div className={classes.inputTextArea}>
-                        <textarea onChange={handleInputText} className={classes.inputText} value={inputText}/>
-                    </div>
-                </div>
-                <div className={classes.postArea}>
-                    <div className={classes.inputFileArea}>
-                        <label className={classes.inputFileLabel}>
-                          <input className={classes.inputFile} type="file" accept="image/*" onChange={previewImage}/>
-                            ファイル添付
-                        </label>
-                        {/* ここは、ファイル添付の状態によって、出しわける予定 */}
-                        <span className={classes.inputFileAttention}>選択されていません</span>
-                        <button className={classes.resetButton} onClick={resetSelectedFile}>リセット</button>
-                        <div className={classes.inputFilePreview}>
-                          <img className={classes.inputFileImage} alt="" src={fileUrl} />
-                        </div>
-                    </div>
-                    <div className={classes.postBottunArea}>
-                      <button onClick={postInputText} className={classes.postBottun}>POST</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <PostArea 
+          handleInputText={handleInputText}
+          inputText={inputText}
+          previewImage={previewImage}
+          resetSelectedFile={resetSelectedFile}
+          fileUrl={fileUrl}
+          postInputText={postInputText}
+          image={image}
+        />
 
         {/* タイムラインエリア */}
         <div className={classes.timeLineArea}>
