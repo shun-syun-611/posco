@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './reset.css'
 import classes from './App.module.scss'
 import PostArea from './components/PostArea/PostArea';
+import TimeLineArea from './components/TimeLineArea/TimeLineArea';
 import image from './img/user.jpeg';
 
 function App() {
@@ -81,42 +82,11 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
         />
 
         {/* タイムラインエリア */}
-        <div className={classes.timeLineArea}>
-
-          <p className={classes.timeLineTitle}>タイムライン</p>
-
-        {
-        todos.map((outputText,index) => {
-          return (
-          <div key={index} className={classes.timeLineCard}>
-            <div className={classes.timeLineContents}>
-              <div className={classes.userArea}>
-                  <img src={image} className={classes.userImage} alt=""/>
-                  <p className={classes.userName}>user name</p>
-              </div>
-              <div className={classes.timeLineContent}>
-                <p className={classes.timeLineText}>{outputText.task}</p>
-                <img className={classes.inputFileImage} alt="" src={outputText.image} />
-              </div>
-            </div>
-
-            <div className={classes.favotitesButton} onClick={()=>favoritesCount(index)}>
-              <span className={classes.heartIcon}></span>
-              <span className={classes.favoritesNumber}>{outputText.favorites}</span>
-              {/* <span className={classes.favoritesNumber}>{outputText.favorites}</span> */}
-            </div>
-          </div>
-          );
-        })
-        }
-
-          {/* map関数テスト */}
-          
-          {/* <div>
-            {arr.map((string, index) => <div key={index}>{`${string}のキーは、${index}です。`}</div>)}
-          </div> */}
-
-        </div>
+       <TimeLineArea 
+        todos={todos}
+        image={image}
+        favoritesCount={favoritesCount} 
+        />
 
       </main>
       <footer className={classes.footer}>POSCO</footer>
