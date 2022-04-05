@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import classes from './TimeLineArea.module.scss'
 
 // ここをまとめる方法を調べる
@@ -14,9 +14,10 @@ type Props = {
     favoritesCount: (index: number) => void;
 }
 
-const TimeLineArea:React.VFC<Props> = (props) => { 
+const TimeLineArea:React.VFC<Props> = memo((props) => { 
  
 const {todos, image, favoritesCount} = props;
+console.log("TimeLineArea通過");
 
 return (
  
@@ -38,7 +39,7 @@ return (
                 </div>
 
                 <div className={classes.favotitesButton} onClick={()=>favoritesCount(index)}>
-                <span className={classes.heartIcon}></span>
+                <span className={outputText.favorites ? classes.heartIconActive : classes.heartIcon}></span>
                 <span className={classes.favoritesNumber}>{outputText.favorites}</span>
                 {/* <span className={classes.favoritesNumber}>{outputText.favorites}</span> */}
                 </div>
@@ -48,6 +49,6 @@ return (
             }
     </div>
     )
-}
+});
 
 export default TimeLineArea

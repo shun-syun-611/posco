@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './reset.css'
 import classes from './App.module.scss'
 import PostArea from './components/PostArea/PostArea';
 import TimeLineArea from './components/TimeLineArea/TimeLineArea';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import image from './img/user.jpeg';
+
 
 function App() {
 
@@ -16,22 +19,21 @@ type Todos = {
   image?: string,
 }
 
+const cullentCount = 0;
 const [todos, setTodos] = useState<Todos[]>([]);
 
 console.log("通過して初期化されてる");
 console.log(todos);
-const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
+const handleInputText = useCallback((e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
   setInputText(e.target.value);
-}
+}, [setInputText]);
 
 // いいねボタンのクリックイベント
-const [count, setCount] = useState<number>(0);
 const favoritesCount = (index:number) => {
   const newTodos = [...todos];
   newTodos[index].favorites = newTodos[index].favorites + 1;
   console.log("いいね!を追加したよ!");
   setTodos(newTodos);
-  console.log(todos);
 }
 
 // 投稿内容の出力
@@ -42,7 +44,7 @@ const postInputText = (e: React.MouseEvent<HTMLButtonElement>) => {
     return;
   }
   const NewTodos = setTodos(
-    [...todos, {task: inputText, favorites: count, image: fileUrl }]
+    [...todos, {task: inputText, favorites: cullentCount, image: fileUrl }]
   );
   setInputText('');
   setFileUrl('');
@@ -67,7 +69,9 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
 
   return (
     <div className={classes.app}>
-      <header className={classes.header}>POSCO</header>
+
+      <Header />
+
       <main className={classes.main}>
 
         {/* 投稿エリア */}
@@ -89,7 +93,9 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
         />
 
       </main>
-      <footer className={classes.footer}>POSCO</footer>
+
+      <Footer />
+      
     </div>
   );
 }
