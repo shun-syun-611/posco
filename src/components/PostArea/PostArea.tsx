@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import classes from './PostArea.module.scss'
 
 type Props = {
@@ -11,9 +11,10 @@ type Props = {
   image: string;
 }
 
-const PostArea:React.VFC<Props> = (props) => {
+const PostArea:React.VFC<Props> = memo((props) => {
 
   const {handleInputText ,inputText ,previewImage ,resetSelectedFile,fileUrl ,postInputText ,image} = props;
+  console.log("PostArea通過");
 
   return (
    <div className={classes.postArea}>
@@ -47,7 +48,7 @@ const PostArea:React.VFC<Props> = (props) => {
             </form>
         </div>
   )
-}
+});
 
 export default PostArea
 
