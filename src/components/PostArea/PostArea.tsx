@@ -1,5 +1,7 @@
-import React, {memo} from 'react'
+import React, {memo, useContext} from 'react'
 import classes from './PostArea.module.scss'
+import { Button } from '@material-ui/core'
+
 
 type Props = {
   handleInputText: (e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => void;
@@ -7,13 +9,13 @@ type Props = {
   previewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectedFile: (e: React.MouseEvent<HTMLButtonElement>) => void;
   fileUrl: string;
-  postInputText:  (e: React.MouseEvent<HTMLButtonElement>) => void;
   image: string;
+  addTodos: () => void;
 }
 
 const PostArea:React.VFC<Props> = memo((props) => {
 
-  const {handleInputText ,inputText ,previewImage ,resetSelectedFile,fileUrl ,postInputText ,image} = props;
+  const {handleInputText ,inputText ,previewImage ,resetSelectedFile,fileUrl ,image,addTodos} = props;
   console.log("PostArea通過");
 
   return (
@@ -41,9 +43,10 @@ const PostArea:React.VFC<Props> = memo((props) => {
                           <img className={classes.inputFileImage} alt="" src={fileUrl} />
                         </div>
                     </div>
-                    <div className={classes.postBottunArea}>
+                    {/* <div className={classes.postBottunArea}>
                       <button onClick={postInputText} className={classes.postBottun}>POST</button>
-                    </div>
+                    </div> */}
+                     <Button variant="contained" onClick={() => addTodos()}>POST</Button>
                 </div>
             </form>
         </div>
