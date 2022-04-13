@@ -2,51 +2,52 @@ import React, {memo} from 'react'
 import classes from './TimeLineArea.module.scss'
 
 // ここをまとめる方法を調べる
-type Todos = {
-  task: string,
-  favorites: number,
-  image?: string,
-}
 
 type Props = {
-    todos: Todos[];
     image: string;
-    favoritesCount: (index: number) => void;
+    todosState: any;
+    addFavorites: (id: number, favorites: number) => void
 }
+
+
 
 const TimeLineArea:React.VFC<Props> = memo((props) => { 
  
-const {todos, image, favoritesCount} = props;
+const {image, todosState, addFavorites} = props;
 console.log("TimeLineArea通過");
 
 return (
  
     <div className={classes.timeLineArea}>
         <p className={classes.timeLineTitle}>タイムライン</p>
+
+        <div>
+        <ul>
             {
-            todos.map((outputText,index) => {
-            return (
-            <div key={index} className={classes.timeLineCard}>
+            todosState.posts.map((todo:any) => {
+                return (
+                todo.task !== "" &&
+                <div key={todo.id} className={classes.timeLineCard}>
                 <div className={classes.timeLineContents}>
                 <div className={classes.userArea}>
                     <img src={image} className={classes.userImage} alt=""/>
                     <p className={classes.userName}>user name</p>
                 </div>
                 <div className={classes.timeLineContent}>
-                    <p className={classes.timeLineText}>{outputText.task}</p>
-                    <img className={classes.inputFileImage} alt="" src={outputText.image} />
+                    <p className={classes.timeLineText}>{todo.task}</p>
+                    <img className={classes.inputFileImage} alt="" src={todo.image} />
                 </div>
                 </div>
 
-                <div className={classes.favotitesButton} onClick={()=>favoritesCount(index)}>
-                <span className={outputText.favorites ? classes.heartIconActive : classes.heartIcon}></span>
-                <span className={classes.favoritesNumber}>{outputText.favorites}</span>
-                {/* <span className={classes.favoritesNumber}>{outputText.favorites}</span> */}
+                <div className={classes.favotitesButton} onClick={() => addFavorites(todo.id,todo.favorites)}>
+                    <span className={todo.favorites ? classes.heartIconActive : classes.heartIcon}></span>
+                    <span className={classes.favoritesNumber}>{todo.favorites}</span>
                 </div>
             </div>
-            );
-            })
+            )})
             }
+        </ul>
+        </div>
     </div>
     )
 });

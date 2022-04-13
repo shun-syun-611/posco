@@ -6,49 +6,42 @@ import TimeLineArea from './components/TimeLineArea/TimeLineArea';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import image from './img/user.jpeg';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from './redux/store';
+import { addTodoAction, addFavoritesAction } from './redux/Todos/actions';
 
 function App() {
+
+  // reduxを用いた状態管理
+  const todosState = useSelector( (state:RootState) => state.todos )
+  console.log(todosState.posts);
+
+  
+  const dispatch = useDispatch();
+
+  const addTodos = () => {
+    if (inputText !== "") {
+      dispatch(addTodoAction(inputText, fileUrl))
+      setInputText("");
+      setFileUrl("");
+    }
+  }
+
+   const addFavorites = (id:number, favorites:number) => {
+      dispatch(addFavoritesAction(id, favorites))
+  }
+
+
+  // reduxを用いた状態管理 ここまで
+
 
 // 投稿内容の入力
 const [inputText, setInputText] = useState("");
 
-type Todos = {
-  task: string,
-  favorites: number,
-  image?: string,
-}
-
-const cullentCount = 0;
-const [todos, setTodos] = useState<Todos[]>([]);
-
 console.log("通過して初期化されてる");
-console.log(todos);
 const handleInputText = useCallback((e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
   setInputText(e.target.value);
 }, [setInputText]);
-
-// いいねボタンのクリックイベント
-const favoritesCount = (index:number) => {
-  const newTodos = [...todos];
-  newTodos[index].favorites = newTodos[index].favorites + 1;
-  console.log("いいね!を追加したよ!");
-  setTodos(newTodos);
-}
-
-// 投稿内容の出力
-const postInputText = (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.preventDefault();
-  if (inputText === "") {
-    alert("テキストを入力してください。")
-    return;
-  }
-  const NewTodos = setTodos(
-    [...todos, {task: inputText, favorites: cullentCount, image: fileUrl }]
-  );
-  setInputText('');
-  setFileUrl('');
-}
 
 // 投稿画像のプレビューの出力
 const [fileUrl, setFileUrl] = useState<string>("");
@@ -81,15 +74,15 @@ const resetSelectedFile = (e: React.MouseEvent<HTMLButtonElement>) => {
           previewImage={previewImage}
           resetSelectedFile={resetSelectedFile}
           fileUrl={fileUrl}
-          postInputText={postInputText}
           image={image}
+          addTodos={addTodos}
         />
 
         {/* タイムラインエリア */}
        <TimeLineArea 
-        todos={todos}
         image={image}
-        favoritesCount={favoritesCount} 
+        todosState={todosState}
+        addFavorites={addFavorites}
         />
 
       </main>
