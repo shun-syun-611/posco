@@ -29,31 +29,14 @@
 }
 .inputTextArea {
   width: 100%;
+  padding: 0 20px;
 }
 .inputText {
   width: 100%;
 }
-.inputFileLabel {
-  display: inline;
-  position: relative;
-  background: #666;
-  color: #fff;
-  font-size: 16px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  transition: all 0.3s;
-  margin-right: 10px;
-  &:hover {
-    opacity: 0.7;
-  }
-}
-.inputFile {
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
+.inputFileButtonArea {
+  display: flex;
+  flex-direction: column;
 }
 .resetButton {
   font-size: 12px;
@@ -73,7 +56,7 @@
 }
 .inputFilePreview {
   width: 35%;
-  height: auto;
+  max-width: 100%;
   margin: 10px;
 }
 .inputFileImage {
@@ -90,4 +73,9 @@
   &:focus {
     outline: none;
   }
+}
+
+// material ui調整
+.postArea button {
+  outline: none;
 }
